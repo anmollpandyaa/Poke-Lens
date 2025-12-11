@@ -15,9 +15,8 @@ export default function Page() {
   const [error, setError] = useState(null);
 
   const limit = 20;
-  const totalPages = 65; // pokeAPI fixed count
+  const totalPages = 65; 
 
-  // Fetch list
   useEffect(() => {
     const fetchList = async () => {
       setLoadingList(true);
@@ -42,14 +41,11 @@ export default function Page() {
     fetchList();
   }, [page]);
 
-  // Fetch details
   const loadDetails = async (pokemon) => {
     setSelected({ name: pokemon.name, details: null });
-
     try {
       const res = await fetch(pokemon.url);
       if (!res.ok) throw new Error("Failed to fetch Pokémon details");
-
       const data = await res.json();
       setSelected({ name: pokemon.name, details: data });
     } catch (err) {
@@ -59,31 +55,25 @@ export default function Page() {
   };
 
   return (
-    <div className="p-6 min-h-screen pokemon-bg">
-      <h1 className="text-3xl font-bold pokemon-title mb-6">
+    <div className="p-6 min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+      <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-yellow-400 to-green-500 mb-8 text-center">
         Pokémon Data Explorer
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* LEFT PANEL */}
-        <div className="glass-card p-4 shadow-lg rounded-xl border border-yellow-300/30">
+        <div className="glass-card p-4 shadow-xl rounded-2xl border border-white/20 transition-all hover:scale-[1.02] hover:shadow-2xl">
           {error && <ErrorMessage message={error} />}
           {loadingList ? (
             <Loading />
           ) : (
             <>
               <PokemonTable list={pokemonList} onSelect={loadDetails} />
-              <Pagination
-                page={page}
-                totalPages={totalPages}
-                setPage={setPage}
-              />
+              <Pagination page={page} totalPages={totalPages} setPage={setPage} />
             </>
           )}
         </div>
 
-        {/* RIGHT PANEL */}
-        <div className="glass-card p-4 shadow-lg rounded-xl border border-sky-300/30">
+        <div className="glass-card p-4 shadow-xl rounded-2xl border border-white/20 transition-all hover:scale-[1.02] hover:shadow-2xl">
           <PokemonDetails selected={selected} />
         </div>
       </div>
